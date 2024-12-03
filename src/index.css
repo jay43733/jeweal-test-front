@@ -1,0 +1,91 @@
+body {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.app {
+  display: flex;
+  height: 100vh;
+  background-color: bisque;
+}
+
+.sidebar {
+  background-color: #e5e1da;
+  flex-basis: 30%;
+  padding-inline: 16px;
+  padding-block: 32px;
+}
+
+.ordermenu {
+  background-color: #f1f0e8;
+  flex-basis: 80%;
+}
+
+.error-text {
+  font-size: 10px;
+  color: red;
+  position: absolute;
+  bottom: 1;
+}
+
+.summary-list {
+  display: flex;
+  justify-content: space-between;
+}
+
+.summary-list > *:nth-child(2) {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+tr > th {
+  background-color: lightgray;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+tr > td {
+  text-align: center;
+  position: relative;
+  height: 40px;
+}
+
+tr > td > input,
+select {
+  width: 70%;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.action-button {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.action-button > button {
+  min-width: 64px;
+}
+
+.add-list {
+  width: 20%;
+  padding: 8px;
+  border-radius: 16px;
+  border: none;
+  background-color: #89a8b2;
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.add-list:hover {
+  opacity: 0.8;
+  transition: all;
+  transition-duration: 200ms;
+}
