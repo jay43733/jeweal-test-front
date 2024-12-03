@@ -6,10 +6,14 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.app {
+.content-container {
   display: flex;
   height: 100vh;
-  background-color: bisque;
+}
+
+table {
+  max-width: 900px;
+  overflow: auto;
 }
 
 .sidebar {
@@ -20,56 +24,181 @@ body {
 }
 
 .ordermenu {
-  background-color: #f1f0e8;
-  flex-basis: 80%;
+  background-color: #f5f5f5;
+  flex-basis: 70%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
 .error-text {
   font-size: 10px;
   color: red;
   position: absolute;
-  bottom: 1;
+  bottom: -1%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .summary-list {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+}
+
+.summary-list > *:first-child{
+  font-weight: 300;
+  font-size: 12px;
 }
 
 .summary-list > *:nth-child(2) {
   font-weight: 600;
-  font-size: 16px;
+  font-size: 14px;
+}
+
+tbody > tr:nth-child(even) {
+  background-color: #f1f0e8;
+}
+
+tbody > tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+tr > th,
+td {
+  min-width: 88px;
 }
 
 tr > th {
   background-color: lightgray;
-  padding: 10px;
+  padding: 4px;
+  padding-block: 10px;
   text-align: center;
   font-size: 14px;
   font-weight: 700;
 }
 
+tr > th:first-child {
+  border-top-left-radius: 8px;
+}
+tr > th:last-child {
+  border-top-right-radius: 8px;
+}
+
+tr > th:first-child,
+td:first-child {
+  padding-left: 8px;
+}
+
+tr > th:last-child,
+td :last-child {
+  padding-right: 8px;
+}
+
+tbody > tr:last-child > td:first-child {
+  border-bottom-left-radius: 8px;
+  padding-block: 10px;
+}
+
+tbody > tr:last-child > td:last-child {
+  border-bottom-right-radius: 8px;
+  padding-block: 10px;
+}
+
 tr > td {
   text-align: center;
   position: relative;
-  height: 40px;
+  min-height: 40px;
+  font-size: 14px;
 }
 
 tr > td > input,
 select {
-  width: 70%;
-  padding: 4px;
+  width: 90%;
+  height: 40%;
+  padding: 6px;
+  padding-left: 8px;
+  border-radius: 6px;
+  border: 1px solid;
+  border-color: #b3c8cf;
   box-sizing: border-box;
+  font-size: 12px;
+}
+
+tr > td > input:focus,
+select:focus {
+  outline: 2px solid #89a8b2;
 }
 
 .action-button {
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 4px;
+  padding: 4px;
 }
 
 .action-button > button {
   min-width: 64px;
+  padding: 6px;
+  border-radius: 8px;
+  border: none;
+}
+
+.action-button > .btn-primary {
+  background-color: #18b473;
+  color: #ffff;
+  font-weight: 700;
+}
+
+.action-button > .btn-caution {
+  background-color: #ee7a78;
+  color: #ffff;
+  font-weight: 700;
+}
+
+.action-button > .btn-secondary {
+  background-color: #b3c8cf;
+  color: #ffff;
+  font-weight: 700;
+}
+
+.action-button > .btn-primary:hover,
+.btn-secondary:hover,
+.btn-caution:hover {
+  opacity: 0.8;
+  transition: all;
+  transition-duration: 300ms;
+}
+
+.btn-large-primary {
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 8px;
+  border: none;
+  background-color: #fff;
+  color: #333333;
+  cursor: pointer;
+}
+
+.btn-large-primary:hover {
+  opacity: 0.7;
+  transition: 300ms;
+}
+
+.btn-large-secondary {
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: transparent;
+  border: none;
+  color: #333333;
+  cursor: pointer;
+}
+
+.btn-large-secondary:hover {
+  font-weight: 600;
+  transition: 300ms;
 }
 
 .add-list {
@@ -88,4 +217,12 @@ select {
   opacity: 0.8;
   transition: all;
   transition-duration: 200ms;
+}
+
+.new-list {
+  height: 56px;
+}
+
+.client-input {
+  padding: 4px;
 }

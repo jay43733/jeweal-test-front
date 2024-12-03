@@ -16,18 +16,14 @@ const SideBar = ({ allOrders }) => {
 
   const totalPrice = Number(actualPrice) + Number(vatPrice);
 
-  console.log(netPrice, "all");
-  console.log(discountPrice, "dis");
-  console.log(actualPrice, "act");
-  console.log(vatPrice, "vat");
   return (
     <div class="sidebar">
       <div style={{ paddingInline: "24px" }}>
         <p style={{ fontSize: "20px" }}>สรุป</p>
         <div class="summary-list">
-          <p>ราคาสุทธิ</p>
+          <p>ราคาสุทธิ (ไม่รวมส่วนลด)</p>
           <p>
-            {Number(netPrice).toLocaleString("en-TH", {
+            {Number(netPrice.toFixed(2)).toLocaleString("en-TH", {
               timeZone: "Asia/Bangkok",
             })}{" "}
             THB
@@ -36,7 +32,7 @@ const SideBar = ({ allOrders }) => {
         <div class="summary-list">
           <p>ส่วนลดท้ายบิล</p>
           <p>
-            {Number(discountPrice).toLocaleString("en-TH", {
+            {Number(discountPrice.toFixed(2)).toLocaleString("en-TH", {
               timeZone: "Asia/Bangkok",
             })}{" "}
             THB
@@ -45,7 +41,7 @@ const SideBar = ({ allOrders }) => {
         <div class="summary-list">
           <p>ราคาหลังหักส่วนลด</p>
           <p>
-            {Number(actualPrice).toLocaleString("en-TH", {
+            {Number(actualPrice.toFixed(2)).toLocaleString("en-TH", {
               timeZone: "Asia/Bangkok",
             })}{" "}
             THB
@@ -54,7 +50,7 @@ const SideBar = ({ allOrders }) => {
         <div class="summary-list">
           <p>Vat</p>
           <p>
-            {Number(vatPrice).toLocaleString("en-TH", {
+            {Number(vatPrice.toFixed(2)).toLocaleString("en-TH", {
               timeZone: "Asia/Bangkok",
             })}{" "}
             THB
@@ -62,13 +58,13 @@ const SideBar = ({ allOrders }) => {
         </div>
         <div
           style={{
-            fontSize: "20px",
+            fontSize: "16px",
             fontWeight: "bold",
             display: "flex",
             justifyContent: "space-between",
             marginTop: "16px",
             paddingBlock: "4px",
-            paddingInline: "16px",
+            paddingInline: "8px",
             borderRadius: "8px",
             color: "#333333",
             backgroundColor: "#F1F0E8",
@@ -77,16 +73,47 @@ const SideBar = ({ allOrders }) => {
           <p>Grand Total</p>
           <p
             style={{
-              fontSize: "20px",
+              fontSize: "16px",
               fontWeight: "bold",
             }}
           >
-            {Number(totalPrice).toLocaleString("en-TH", {
+            {Number(totalPrice.toFixed(2)).toLocaleString("en-TH", {
               timeZone: "Asia/Bangkok",
             })}{" "}
             THB
           </p>
         </div>
+        <textarea
+          style={{
+            width: "100%",
+            height: "100px",
+            resize: "none",
+            border: "1px solid #91959A",
+            borderRadius: "8px",
+            padding: "16px",
+            boxSizing: "border-box",
+            marginBlock: "40px",
+          }}
+          name="comment"
+          placeholder="Note"
+        ></textarea>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          paddingInline: "40px",
+          gap: "6px",
+        }}
+      >
+        <button class="btn-large-primary">Save</button>
+        <button
+          class="btn-large-secondary"
+          // onClick={() => setIsListCreated(false)}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );

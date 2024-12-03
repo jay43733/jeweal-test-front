@@ -3,15 +3,6 @@ import ListOrder from "./ListOrder";
 import NewList from "./NewList";
 
 const Table = ({ allOrders, setAllOrders }) => {
-  // const [allOrders, setAllOrders] = useState(() => {
-  //   const savedOrders = localStorage.getItem("allOrders");
-  //   return savedOrders ? JSON.parse(savedOrders) : dataOrder;
-  // });
-
-  // useEffect(() => {
-  //   localStorage.setItem("allOrders", JSON.stringify(allOrders));
-  // }, [allOrders]);
-
   const [isListCreated, setIsListCreated] = useState(false);
 
   const hdlAddList = () => {
@@ -24,12 +15,15 @@ const Table = ({ allOrders, setAllOrders }) => {
         padding: "8px",
         display: "flex",
         flexDirection: "column",
-        gap: "40px",
+        alignItems: "center",
+        gap: "24px",
+        minWidth:"100%"
       }}
     >
       <table
         style={{
-          width: "100%",
+          minWidth: "100%",
+          borderCollapse: "collapse",
         }}
       >
         <thead>
@@ -38,7 +32,7 @@ const Table = ({ allOrders, setAllOrders }) => {
             <th>รหัสสินค้า</th>
             <th>จำนวน</th>
             <th>น้ำหนัก</th>
-            <th>ราคา / น้ำหนัก</th>
+            <th>ราคา/หน่วย</th>
             <th>หน่วย</th>
             <th>ราคาก่อนส่วนลด</th>
             <th>ส่วนลด</th>
@@ -60,10 +54,7 @@ const Table = ({ allOrders, setAllOrders }) => {
         </tbody>
       </table>
       {!isListCreated && (
-        <button
-          class="add-list"
-          onClick={hdlAddList}
-        >
+        <button class="add-list" onClick={hdlAddList}>
           + Add List
         </button>
       )}

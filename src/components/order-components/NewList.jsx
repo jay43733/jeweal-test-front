@@ -22,7 +22,6 @@ const NewList = ({ setIsListCreated, setAllOrders, id }) => {
       number: /^(?!0)\d*$/,
       weight: /^\d*\.?\d*$/,
       pricePerWeight: /^\d*\.?\d*$/,
-      priceBeforeDiscount: /^\d*\.?\d*$/,
       discount: /^\d*\.?\d*$/,
     };
     if (validateInput[name] && !validateInput[name].test(value)) return;
@@ -30,6 +29,22 @@ const NewList = ({ setIsListCreated, setAllOrders, id }) => {
 
     setNewList((prv) => ({ ...prv, [name]: value }));
   };
+  // ราคาก่อนส่วนลด
+  const netPrice =
+    newList.unit === "piece"
+      ? newList.pricePerWeight * newList.number
+      : newList.pricePerWeight * newList.weight * newList.number;
+
+  // ราคาสุทธิ
+  const actualPrice =
+    newList.unit === "piece"
+      ? newList.pricePerWeight *
+        newList.number *
+        ((100 - (newList.discount || 0)) / 100)
+      : newList.pricePerWeight *
+        newList.weight *
+        newList.number *
+        ((100 - (newList.discount || 0)) / 100);
 
   const hdlAddList = () => {
     // Filter key and value from newList to check white space
@@ -38,36 +53,38 @@ const NewList = ({ setIsListCreated, setAllOrders, id }) => {
         key !== "price" &&
         key !== "id" &&
         key !== "discount" &&
+        key !== "priceBeforeDiscount" &&
         (!value || value.toString().trim() === "")
     );
 
     // If there is any white space
     if (hasEmpty.length > 0) {
       const errors = Object.fromEntries(
-        hasEmpty.map(([key]) => [key, `${key} is required`])
+        hasEmpty.map(([key]) => [key, "*Required"])
       );
       return setFormError(errors);
     }
 
-    // Set Price with calculation
-    const calculatedPrice = newList?.priceBeforeDiscount * newList?.number;
-
     const finalList = {
       ...newList,
-      price: calculatedPrice,
+      priceBeforeDiscount: netPrice,
+      price: actualPrice,
     };
-
     setAllOrders((prv) => [...prv, finalList]);
     setIsListCreated(false);
+    
   };
 
-  console.log(newList, "new");
+  const hdlCancel = () =>{
+    setIsListCreated(false)
+    setFormError({})
+  }
 
   return (
     <>
-      <tr style={{ backgroundColor: "white" }}>
+      <tr>
         <td>{id}</td>
-        <td>
+        <td class="new-list">
           <input
             name="productId"
             value={newList?.productId}
@@ -78,7 +95,7 @@ const NewList = ({ setIsListCreated, setAllOrders, id }) => {
             <p class="error-text">{formError?.productId}</p>
           )}
         </td>
-        <td>
+        <td class="new-list">
           <input
             name="number"
             value={newList?.number}
@@ -87,7 +104,7 @@ const NewList = ({ setIsListCreated, setAllOrders, id }) => {
           />
           {formError.number && <p class="error-text">{formError.number}</p>}
         </td>
-        <td>
+        <td class="new-list">
           <input
             name="weight"
             value={newList?.weight}
@@ -96,39 +113,33 @@ const NewList = ({ setIsListCreated, setAllOrders, id }) => {
           />
           {formError.weight && <p class="error-text">{formError.weight}</p>}
         </td>
-        <td style={{ height: "100px" }}>
+        <td class="new-list">
           <input
             name="pricePerWeight"
             value={newList?.pricePerWeight}
             onChange={hdlChangeNewList}
-            placeholder="Price / Wight"
+            placeholder="Price / Weight"
           />
           {formError.pricePerWeight && (
             <p class="error-text">{formError.pricePerWeight}</p>
           )}
         </td>
-        <td>
+        <td class="new-list">
           <select onChange={hdlChangeNewList} name="unit">
-            <option defaultValue="" disabled>
+            <option value="" selected disabled>
               Select
             </option>
-            <option value="piece">Piece</option>
-            <option value="gram">Gram</option>
+            <option value="piece">ชิ้น</option>
+            <option value="gram">กรัม</option>
           </select>
           {formError.unit && <p class="error-text">{formError.unit}</p>}
         </td>
-        <td>
-          <input
-            name="priceBeforeDiscount"
-            value={newList?.priceBeforeDiscount}
-            onChange={hdlChangeNewList}
-            placeholder="Price Before Discount"
-          />
-          {formError.priceBeforeDiscount && (
-            <p class="error-text">{formError.priceBeforeDiscount}</p>
-          )}
+        <td class="new-list">
+          {Number(netPrice).toLocaleString("en-TH", {
+            timeZone: "Asia/Bangkok",
+          })}
         </td>
-        <td>
+        <td class="new-list">
           <input
             name="discount"
             value={newList?.discount}
@@ -136,12 +147,24 @@ const NewList = ({ setIsListCreated, setAllOrders, id }) => {
             placeholder="Discount"
           />
         </td>
-        <td>{newList?.priceBeforeDiscount * newList?.number}</td>
-
         <td>
+          {" "}
+          {Number(actualPrice).toLocaleString("en-TH", {
+            timeZone: "Asia/Bangkok",
+          })}
+        </td>
+
+        <td class="new-list">
           <div class="action-button">
-            <button onClick={hdlAddList}>Confirm</button>
-            <button onClick={() => setIsListCreated(false)}>Cancel</button>
+            <button class="btn-primary" onClick={hdlAddList}>
+              Confirm
+            </button>
+            <button
+              class="btn-secondary"
+              onClick={hdlCancel}
+            >
+              Cancel
+            </button>
           </div>
         </td>
       </tr>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SideBar from "./components/SideBar";
 import OrderMenu from "./components/OrderMenu";
+import ClientDetail from "./components/ClientDetail";
 
 const App = () => {
   // Mock data
@@ -11,7 +12,7 @@ const App = () => {
       number: 2,
       weight: 10,
       pricePerWeight: 10,
-      unit: "gram",
+      unit: "กรัม",
       priceBeforeDiscount: 1000,
       discount: 0,
       price: 1000,
@@ -22,7 +23,7 @@ const App = () => {
       number: 2,
       weight: 10,
       pricePerWeight: 10,
-      unit: "gram",
+      unit: "กรัม",
       priceBeforeDiscount: 1000,
       discount: 0,
       price: 1000,
@@ -33,7 +34,7 @@ const App = () => {
       number: 2,
       weight: 10,
       pricePerWeight: 10,
-      unit: "gram",
+      unit: "กรัม",
       priceBeforeDiscount: 1000,
       discount: 0,
       price: 1000,
@@ -48,11 +49,15 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem("allOrders", JSON.stringify(allOrders));
   }, [allOrders]);
+
   return (
-    <div class="app">
-      <OrderMenu allOrders={allOrders} setAllOrders={setAllOrders} />
-      <SideBar allOrders={allOrders} />
-    </div>
+    <>
+      <ClientDetail />
+      <div class="content-container">
+        <OrderMenu allOrders={allOrders} setAllOrders={setAllOrders} />
+        <SideBar allOrders={allOrders} />
+      </div>
+    </>
   );
 };
 

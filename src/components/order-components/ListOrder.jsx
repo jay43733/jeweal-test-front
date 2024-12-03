@@ -13,7 +13,18 @@ const ListOrder = ({ id, item, setAllOrders }) => {
   };
 
   const hdlChangeEditList = (e) => {
-    setSelectedList((prv) => ({ ...prv, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    const validateInput = {
+      productId: /^[a-zA-z0-9]+$/,
+      number: /^(?!0)\d*$/,
+      weight: /^\d*\.?\d*$/,
+      pricePerWeight: /^\d*\.?\d*$/,
+      priceBeforeDiscount: /^\d*\.?\d*$/,
+      discount: /^\d*\.?\d*$/,
+    };
+    if (validateInput[name] && !validateInput[name].test(value)) return;
+    if (name === "discount" && value > 100) return;
+    setSelectedList((prv) => ({ ...prv, [name]: value }));
   };
 
   const hdlSaveEditedList = () => {
@@ -23,10 +34,26 @@ const ListOrder = ({ id, item, setAllOrders }) => {
     setIsListEdited(false);
   };
 
+  // ราคาก่อนส่วนลด
+  const netPrice =
+    item.unit === "piece"
+      ? item.pricePerWeight * item.number
+      : item.pricePerWeight * item.weight * item.number;
+
+  // ราคาสุทธิ
+  const actualPrice =
+    item.unit === "piece"
+      ? item.pricePerWeight * item.number * ((100 - (item.discount || 0)) / 100)
+      : item.pricePerWeight *
+        item.weight *
+        item.number *
+        ((100 - (item.discount || 0)) / 100);
+
+  
   return (
     <>
       {isListEdited ? (
-        <tr style={{ backgroundColor: "whitesmoke" }}>
+        <tr>
           <td>{item.id}</td>
           <td>
             <input
@@ -61,19 +88,33 @@ const ListOrder = ({ id, item, setAllOrders }) => {
             />
           </td>
           <td>
-            <select defaultValue={item.unit} name="unit">
+            <select
+              onChange={hdlChangeEditList}
+              defaultValue={item.unit}
+              name="unit"
+            >
               <option disabled>Select</option>
-              <option value="piece">Piece</option>
-              <option value="gram">Gram</option>
+              <option value="piece">ชิ้น</option>
+              <option value="gram">กรัม</option>
             </select>
           </td>
           <td>
-            <input
-              name="priceBeforeDiscount"
-              value={selectedList.priceBeforeDiscount}
-              onChange={hdlChangeEditList}
-              placeholder="Price Before Discount"
-            />
+            {Number(netPrice).toLocaleString("en-TH", {
+              timeZone: "Asia/Bangkok",
+            })}
+            {/* {selectedList?.unit === "piece"
+              ? Number(
+                  selectedList?.pricePerWeight * selectedList?.number
+                ).toLocaleString("en-TH", {
+                  timeZone: "Asia/Bangkok",
+                })
+              : Number(
+                  selectedList?.pricePerWeight *
+                    selectedList?.number *
+                    selectedList?.weight
+                ).toLocaleString("en-TH", {
+                  timeZone: "Asia/Bangkok",
+                })} */}
           </td>
           <td>
             <input
@@ -84,21 +125,32 @@ const ListOrder = ({ id, item, setAllOrders }) => {
             />
           </td>
           <td>
-            {Number(
-              selectedList?.priceBeforeDiscount * selectedList?.number
-            ).toLocaleString("en-TH", {
+            {Number(actualPrice).toLocaleString("en-TH", {
               timeZone: "Asia/Bangkok",
             })}
+            {/* {Number(
+              selectedList?.priceBeforeDiscount *
+                ((100 - selectedList?.discount) / 100)
+            ).toLocaleString("en-TH", {
+              timeZone: "Asia/Bangkok",
+            })} */}
           </td>
           <td>
             <div class="action-button">
-              <button onClick={hdlSaveEditedList}>Confirm</button>
-              <button onClick={() => setIsListEdited(false)}>Cancel</button>
+              <button class="btn-primary" onClick={hdlSaveEditedList}>
+                Confirm
+              </button>
+              <button
+                class="btn-secondary"
+                onClick={() => setIsListEdited(false)}
+              >
+                Cancel
+              </button>
             </div>
           </td>
         </tr>
       ) : (
-        <tr style={{ backgroundColor: "white" }}>
+        <tr>
           <td>{item.id}</td>
           <td>{item.productId}</td>
           <td>
@@ -116,25 +168,32 @@ const ListOrder = ({ id, item, setAllOrders }) => {
               timeZone: "Asia/Bangkok",
             })}
           </td>
-          <td>{item.unit}</td>
+          <td>{item.unit === "gram" ? "กรัม" : "ชิ้น"}</td>
           <td>
-            {Number(item.priceBeforeDiscount).toLocaleString("en-TH", {
+            {netPrice.toLocaleString("en-TH", {
               timeZone: "Asia/Bangkok",
             })}
           </td>
-          <td>{item.discount}</td>
+          <td>{item.discount ? `${item.discount} %` : ""}</td>
           <td>
-            {Number(item?.priceBeforeDiscount * item?.number).toLocaleString(
-              "en-TH",
-              {
-                timeZone: "Asia/Bangkok",
-              }
-            )}
+            {actualPrice.toLocaleString("en-TH", {
+              timeZone: "Asia/Bangkok",
+            })}
           </td>
           <td>
             <div class="action-button">
-              <button onClick={() => setIsListEdited(true)}>Edit</button>
-              <button onClick={() => hdlDeleteList(item.id)}>Delete</button>
+              <button
+                class="btn-secondary"
+                onClick={() => setIsListEdited(true)}
+              >
+                Edit
+              </button>
+              <button
+                class="btn-caution"
+                onClick={() => hdlDeleteList(item.id)}
+              >
+                Delete
+              </button>
             </div>
           </td>
         </tr>
