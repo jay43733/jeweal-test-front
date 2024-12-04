@@ -1,20 +1,20 @@
-import React, { useState } from "react";
+import useListStore from "../store/listStore";
 
-const SideBar = ({ allOrders }) => {
-  const netPrice = allOrders.reduce((prev, curr) => {
-    return (prev += curr.priceBeforeDiscount * curr.number);
+const SideBar = () => {
+  const lists = useListStore((state) => state.lists);
+  const actualPrice = lists.reduce((prev, curr) => {
+    return (prev += +curr.actualPrice);
   }, 0);
 
-  const discountPrice = allOrders.reduce((prev, curr) => {
-    return (prev +=
-      curr.priceBeforeDiscount * curr.number * (curr.discount / 100));
+  const discountPrice = lists.reduce((prev, curr) => {
+    return (prev += (+curr.actualPrice * (curr.discount || 0)) / 100);
   }, 0);
 
-  const actualPrice = Number(netPrice) - Number(discountPrice);
+  const netPrice = Number(actualPrice) - Number(discountPrice);
 
-  const vatPrice = (Number(actualPrice) * 7) / 100;
+  const vatPrice = (Number(netPrice) * 7) / 100;
 
-  const totalPrice = Number(actualPrice) + Number(vatPrice);
+  const totalPrice = Number(netPrice) + Number(vatPrice);
 
   return (
     <div class="sidebar">
@@ -23,7 +23,7 @@ const SideBar = ({ allOrders }) => {
         <div class="summary-list">
           <p>ราคาสุทธิ (ไม่รวมส่วนลด)</p>
           <p>
-            {Number(netPrice.toFixed(2)).toLocaleString("en-TH", {
+            {Number(actualPrice.toFixed(2)).toLocaleString("en-TH", {
               timeZone: "Asia/Bangkok",
             })}{" "}
             THB
@@ -41,7 +41,7 @@ const SideBar = ({ allOrders }) => {
         <div class="summary-list">
           <p>ราคาหลังหักส่วนลด</p>
           <p>
-            {Number(actualPrice.toFixed(2)).toLocaleString("en-TH", {
+            {Number(netPrice.toFixed(2)).toLocaleString("en-TH", {
               timeZone: "Asia/Bangkok",
             })}{" "}
             THB
@@ -110,7 +110,7 @@ const SideBar = ({ allOrders }) => {
         <button class="btn-large-primary">Save</button>
         <button
           class="btn-large-secondary"
-          // onClick={() => setIsListCreated(false)}
+          onClick={() => setIsListCreated(false)}
         >
           Cancel
         </button>
@@ -118,5 +118,4 @@ const SideBar = ({ allOrders }) => {
     </div>
   );
 };
-
 export default SideBar;

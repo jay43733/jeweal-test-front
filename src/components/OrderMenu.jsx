@@ -1,10 +1,10 @@
 import React from "react";
 import Table from "./order-components/Table";
 
-const OrderMenu = ({ allOrders, setAllOrders }) => {
+const OrderMenu = () => {
   return (
     <>
-      <div class="ordermenu">
+      <div className="ordermenu">
         <div
           style={{
             marginInline: "24px",
@@ -14,7 +14,7 @@ const OrderMenu = ({ allOrders, setAllOrders }) => {
           }}
         >
           <p style={{ fontSize: "24px" }}>รายการสินค้า</p>
-          <Table allOrders={allOrders} setAllOrders={setAllOrders} />
+          <Table />
         </div>
         <textarea
           style={{
@@ -24,7 +24,7 @@ const OrderMenu = ({ allOrders, setAllOrders }) => {
             border: "1px solid #91959A",
             borderRadius: "8px",
             padding: "16px",
-            Width:"100%"
+            Width: "100%",
           }}
           name="comment"
           placeholder="Remark"
