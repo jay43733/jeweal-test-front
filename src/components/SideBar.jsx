@@ -1,6 +1,25 @@
+import { useEffect } from "react";
 import useListStore from "../store/listStore";
 
 const SideBar = () => {
+  const currentListMenu = useListStore((state) => state.currentListMenu);
+  const formListMenu = useListStore((state) => state.formListMenu);
+  const listMenu = useListStore((state)=>state.listMenu)
+  const setFormListMenu = useListStore((state) => state.setFormListMenu);
+  const isEditedListMenu = useListStore((state) => state.isEditedListMenu);
+  const setIsEditedListMenu = useListStore(
+    (state) => state.setIsEditedListMenu
+  );
+  const actionUpdateListMenuById = useListStore(
+    (state) => state.actionUpdateListMenuById
+  );
+  const actionGetListMenuById = useListStore(
+    (state) => state.actionGetListMenuById
+  );
+
+  const hdlChangeFormListMenu = (e) => {
+    setFormListMenu({ [e.target.name]: e.target.value });
+  };
   const lists = useListStore((state) => state.lists);
   const actualPrice = lists.reduce((prev, curr) => {
     return (prev += +curr.actualPrice);
@@ -16,11 +35,23 @@ const SideBar = () => {
 
   const totalPrice = Number(netPrice) + Number(vatPrice);
 
+  const hdlSaveUpdateListMenu = async (form, id) => {
+    await actionUpdateListMenuById(form, id);
+    await actionGetListMenuById(id);
+    setIsEditedListMenu(false);
+  };
+
+  useEffect(()=>{
+    if (!isEditedListMenu && listMenu) {
+      setFormListMenu({ ...listMenu });
+    }
+  },[listMenu])
+
   return (
-    <div class="sidebar">
+    <div className="sidebar">
       <div style={{ paddingInline: "24px" }}>
         <p style={{ fontSize: "20px" }}>สรุป</p>
-        <div class="summary-list">
+        <div className="summary-list">
           <p>ราคาสุทธิ (ไม่รวมส่วนลด)</p>
           <p>
             {Number(actualPrice.toFixed(2)).toLocaleString("en-TH", {
@@ -29,7 +60,7 @@ const SideBar = () => {
             THB
           </p>
         </div>
-        <div class="summary-list">
+        <div className="summary-list">
           <p>ส่วนลดท้ายบิล</p>
           <p>
             {Number(discountPrice.toFixed(2)).toLocaleString("en-TH", {
@@ -38,7 +69,7 @@ const SideBar = () => {
             THB
           </p>
         </div>
-        <div class="summary-list">
+        <div className="summary-list">
           <p>ราคาหลังหักส่วนลด</p>
           <p>
             {Number(netPrice.toFixed(2)).toLocaleString("en-TH", {
@@ -47,7 +78,7 @@ const SideBar = () => {
             THB
           </p>
         </div>
-        <div class="summary-list">
+        <div className="summary-list">
           <p>Vat</p>
           <p>
             {Number(vatPrice.toFixed(2)).toLocaleString("en-TH", {
@@ -64,10 +95,10 @@ const SideBar = () => {
             justifyContent: "space-between",
             marginTop: "16px",
             paddingBlock: "4px",
-            paddingInline: "8px",
+            paddingInline: "12px",
             borderRadius: "8px",
             color: "#333333",
-            backgroundColor: "#F1F0E8",
+            backgroundColor: "#FFFFFF",
           }}
         >
           <p>Grand Total</p>
@@ -84,17 +115,11 @@ const SideBar = () => {
           </p>
         </div>
         <textarea
-          style={{
-            width: "100%",
-            height: "100px",
-            resize: "none",
-            border: "1px solid #91959A",
-            borderRadius: "8px",
-            padding: "16px",
-            boxSizing: "border-box",
-            marginBlock: "40px",
-          }}
-          name="comment"
+          value={formListMenu?.note}
+          disabled={!isEditedListMenu}
+          onChange={hdlChangeFormListMenu}
+          className="textarea-note"
+          name="note"
           placeholder="Note"
         ></textarea>
       </div>
@@ -103,17 +128,25 @@ const SideBar = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          paddingInline: "40px",
+          paddingInline: "16px",
           gap: "6px",
         }}
       >
-        <button class="btn-large-primary">Save</button>
-        <button
-          class="btn-large-secondary"
-          onClick={() => setIsListCreated(false)}
-        >
-          Cancel
-        </button>
+        {isEditedListMenu ? (
+          <button
+            onClick={() => hdlSaveUpdateListMenu(formListMenu, currentListMenu)}
+            className="btn-large-primary"
+          >
+            Save
+          </button>
+        ) : (
+          <button
+            onClick={() => setIsEditedListMenu(true)}
+            className="btn-large-primary"
+          >
+            Edit
+          </button>
+        )}
       </div>
     </div>
   );

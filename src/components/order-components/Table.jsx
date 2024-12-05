@@ -5,6 +5,7 @@ import useListStore from "../../store/listStore";
 
 const Table = () => {
   const lists = useListStore((state) => state.lists);
+  const isEditedListMenu = useListStore((state) => state.isEditedListMenu);
   const [isListCreated, setIsListCreated] = useState(false);
 
   const hdlAddList = () => {
@@ -44,11 +45,7 @@ const Table = () => {
         </thead>
         <tbody>
           {lists?.map((item, index) => (
-            <ListOrder
-              key={item.listId}
-              item={item}
-              index={index}
-            />
+            <ListOrder key={item.listId} item={item} index={index} />
           ))}
           {isListCreated && (
             <NewList
@@ -58,7 +55,7 @@ const Table = () => {
           )}
         </tbody>
       </table>
-      {!isListCreated && (
+      {isEditedListMenu && !isListCreated && (
         <button className="add-list" onClick={hdlAddList}>
           + Add List
         </button>
