@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ListOrder from "./ListOrder";
 import NewList from "./NewList";
+import useListStore from "../../store/listStore";
 
-const Table = ({ allOrders, setAllOrders }) => {
+const Table = () => {
+  const lists = useListStore((state) => state.lists);
   const [isListCreated, setIsListCreated] = useState(false);
 
   const hdlAddList = () => {
@@ -17,7 +19,7 @@ const Table = ({ allOrders, setAllOrders }) => {
         flexDirection: "column",
         alignItems: "center",
         gap: "24px",
-        minWidth:"100%"
+        minWidth: "100%",
       }}
     >
       <table
@@ -41,20 +43,23 @@ const Table = ({ allOrders, setAllOrders }) => {
           </tr>
         </thead>
         <tbody>
-          {allOrders.map((item, index) => (
-            <ListOrder key={index} item={item} setAllOrders={setAllOrders} />
+          {lists?.map((item, index) => (
+            <ListOrder
+              key={item.listId}
+              item={item}
+              index={index}
+            />
           ))}
           {isListCreated && (
             <NewList
               setIsListCreated={setIsListCreated}
-              setAllOrders={setAllOrders}
-              id={allOrders.length + 1}
+              id={lists.length + 1}
             />
           )}
         </tbody>
       </table>
       {!isListCreated && (
-        <button class="add-list" onClick={hdlAddList}>
+        <button className="add-list" onClick={hdlAddList}>
           + Add List
         </button>
       )}

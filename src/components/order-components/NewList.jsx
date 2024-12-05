@@ -1,6 +1,13 @@
 import React, { useState } from "react";
+import useListStore from "../../store/listStore";
 
 const NewList = ({ setIsListCreated, setAllOrders, id }) => {
+  const convertNumber = useListStore((state) => state.convertNumber);
+  const actionAddList = useListStore((state) => state.actionAddList);
+  const actionGetListById = useListStore((state) => state.actionGetListById);
+  const lists = useListStore((state)=>state.lists)
+  const currentListMenu = useListStore((state) => state.currentListMenu);
+
   const [newList, setNewList] = useState({
     id: id,
     productId: "",
@@ -11,7 +18,22 @@ const NewList = ({ setIsListCreated, setAllOrders, id }) => {
     priceBeforeDiscount: "",
     discount: "",
     price: "",
+    listMenuId: Number(currentListMenu),
   });
+
+  // Convert the decimal fields to numbers
+  const [convertedNewList] = convertNumber(
+    [newList],
+    [
+      "discount",
+      "number",
+      "pricePerWeight",
+      "weight",
+      "productId",
+      "listMenuId",
+    ]
+  );
+
 
   const [formError, setFormError] = useState({});
 
@@ -46,7 +68,7 @@ const NewList = ({ setIsListCreated, setAllOrders, id }) => {
         newList.number *
         ((100 - (newList.discount || 0)) / 100);
 
-  const hdlAddList = () => {
+  const hdlAddList = async () => {
     // Filter key and value from newList to check white space
     const hasEmpty = Object.entries(newList).filter(
       ([key, value]) =>
@@ -64,56 +86,53 @@ const NewList = ({ setIsListCreated, setAllOrders, id }) => {
       );
       return setFormError(errors);
     }
-
-    const finalList = {
-      ...newList,
-      priceBeforeDiscount: netPrice,
-      price: actualPrice,
-    };
-    setAllOrders((prv) => [...prv, finalList]);
+    await actionAddList(convertedNewList);
+    await actionGetListById(currentListMenu);
     setIsListCreated(false);
-    
   };
 
-  const hdlCancel = () =>{
-    setIsListCreated(false)
-    setFormError({})
-  }
-
+  const hdlCancel = () => {
+    setIsListCreated(false);
+    setFormError({});
+  };
   return (
     <>
       <tr>
         <td>{id}</td>
-        <td class="new-list">
-          <input
-            name="productId"
-            value={newList?.productId}
-            onChange={hdlChangeNewList}
-            placeholder="Product Id"
-          />
+        <td className="new-list">
+          <select defaultValue="" onChange={hdlChangeNewList} name="productId">
+            <option value="" disabled>
+              Select
+            </option>
+            <option value="4">PRO1</option>
+            <option value="5">PRO2</option>
+            <option value="6">PRO3</option>
+            <option value="7">PRO4</option>
+            <option value="8">PRO5</option>
+          </select>
           {formError?.productId && (
-            <p class="error-text">{formError?.productId}</p>
+            <p className="error-text">{formError?.productId}</p>
           )}
         </td>
-        <td class="new-list">
+        <td className="new-list">
           <input
             name="number"
             value={newList?.number}
             onChange={hdlChangeNewList}
             placeholder="Number"
           />
-          {formError.number && <p class="error-text">{formError.number}</p>}
+          {formError.number && <p className="error-text">{formError.number}</p>}
         </td>
-        <td class="new-list">
+        <td className="new-list">
           <input
             name="weight"
             value={newList?.weight}
             onChange={hdlChangeNewList}
             placeholder="Weight"
           />
-          {formError.weight && <p class="error-text">{formError.weight}</p>}
+          {formError.weight && <p className="error-text">{formError.weight}</p>}
         </td>
-        <td class="new-list">
+        <td className="new-list">
           <input
             name="pricePerWeight"
             value={newList?.pricePerWeight}
@@ -121,25 +140,25 @@ const NewList = ({ setIsListCreated, setAllOrders, id }) => {
             placeholder="Price / Weight"
           />
           {formError.pricePerWeight && (
-            <p class="error-text">{formError.pricePerWeight}</p>
+            <p className="error-text">{formError.pricePerWeight}</p>
           )}
         </td>
-        <td class="new-list">
-          <select onChange={hdlChangeNewList} name="unit">
-            <option value="" selected disabled>
+        <td className="new-list">
+          <select onChange={hdlChangeNewList} defaultValue="" name="unit">
+            <option value="" disabled>
               Select
             </option>
-            <option value="piece">ชิ้น</option>
-            <option value="gram">กรัม</option>
+            <option value="PIECE">ชิ้น</option>
+            <option value="GRAM">กรัม</option>
           </select>
-          {formError.unit && <p class="error-text">{formError.unit}</p>}
+          {formError.unit && <p className="error-text">{formError.unit}</p>}
         </td>
-        <td class="new-list">
+        <td className="new-list">
           {Number(netPrice).toLocaleString("en-TH", {
             timeZone: "Asia/Bangkok",
           })}
         </td>
-        <td class="new-list">
+        <td className="new-list">
           <input
             name="discount"
             value={newList?.discount}
@@ -154,15 +173,12 @@ const NewList = ({ setIsListCreated, setAllOrders, id }) => {
           })}
         </td>
 
-        <td class="new-list">
-          <div class="action-button">
-            <button class="btn-primary" onClick={hdlAddList}>
+        <td className="new-list">
+          <div className="action-button">
+            <button className="btn-primary" onClick={hdlAddList}>
               Confirm
             </button>
-            <button
-              class="btn-secondary"
-              onClick={hdlCancel}
-            >
+            <button className="btn-secondary" onClick={hdlCancel}>
               Cancel
             </button>
           </div>
