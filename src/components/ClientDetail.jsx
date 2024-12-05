@@ -1,26 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import useListStore from "../store/listStore";
 
 const ClientDetail = () => {
-  const [form, setForm] = useState({
-    docNumber: "",
-    issuedDate: "",
-    dueDate: "",
-    clientName: "",
-    taxInvoice: "",
-    address: "",
-    remarkNumber: "",
-    currency: "",
-  });
+  const listMenu = useListStore((state) => state.listMenu);
+  const formListMenu = useListStore((state) => state.formListMenu);
+  const setFormListMenu = useListStore((state) => state.setFormListMenu);
+  const isEditedListMenu = useListStore((state) => state.isEditedListMenu);
 
-  const [isEdited, setIsEdited] = useState(false);
-
-  const hdlChangeForm = (e) => {
-    setForm((prv) => ({ ...prv, [e.target.name]: e.target.value }));
+  const hdlChangeFormListMenu = (e) => {
+    setFormListMenu({ [e.target.name]: e.target.value });
   };
 
+  console.log(formListMenu, "dssssssssssss");
+  console.log(listMenu, "list");
 
   return (
-    <div style={{ display: "flex", backgroundColor: "#ffff" }}>
+    <div style={{ display: "flex", backgroundColor: "#92D0FA" }}>
       <div
         style={{
           display: "flex",
@@ -33,60 +28,68 @@ const ClientDetail = () => {
         }}
       >
         <input
+          disabled={!isEditedListMenu}
           className="client-input"
           name="docNumber"
-          value={form?.docNumber}
-          onChange={hdlChangeForm}
+          value={formListMenu?.docNumber}
+          onChange={hdlChangeFormListMenu}
           placeholder="หมายเลขเอกสาร"
         />
         <input
+          disabled={!isEditedListMenu}
           className="client-input"
           name="issuedDate"
-          value={form?.issuedDate}
-          onChange={hdlChangeForm}
+          value={formListMenu?.issuedDate}
+          onChange={hdlChangeFormListMenu}
           placeholder="วันที่ออกเอกสาร"
         />
         <input
+          disabled={!isEditedListMenu}
           className="client-input"
           name="dueDate"
-          value={form?.dueDate}
-          onChange={hdlChangeForm}
+          value={formListMenu?.dueDate}
+          onChange={hdlChangeFormListMenu}
           placeholder="วันที่ครบกำหนด"
         />
-    
+
         <input
+          disabled={!isEditedListMenu}
           className="client-input"
           name="taxInvoice"
-          value={form?.taxInvoice}
-          onChange={hdlChangeForm}
+          value={formListMenu?.taxInvoice}
+          onChange={hdlChangeFormListMenu}
           placeholder="ชื่อลูกค้า"
         />
         <input
+          disabled={!isEditedListMenu}
           className="client-input"
           name="address"
-          value={form?.address}
-          onChange={hdlChangeForm}
+          value={formListMenu?.address}
+          onChange={hdlChangeFormListMenu}
           placeholder="ที่อยู่ออกใบกำกับ"
         />
         <input
+          disabled={!isEditedListMenu}
           className="client-input"
           name="remarkNumber"
-          value={form?.remarkNumber}
-          onChange={hdlChangeForm}
+          value={formListMenu?.remarkNumber}
+          onChange={hdlChangeFormListMenu}
           placeholder="ที่อยู่จัดส่ง"
         />
         <input
+          disabled={!isEditedListMenu}
           className="client-input"
           name="currency"
-          value={form?.currency}
-          onChange={hdlChangeForm}
+          value={formListMenu?.currency}
+          onChange={hdlChangeFormListMenu}
           placeholder="หมายเลขเอกสารอ้างอิง"
         />
-         <input
+        <input
+          disabled={!isEditedListMenu}
           className="client-input"
           name="clientName"
-          value={form?.clientName}
-          onChange={hdlChangeForm}
+          value={formListMenu?.clientName}
+          onChange={hdlChangeFormListMenu}
           placeholder="Currency"
         />
       </div>

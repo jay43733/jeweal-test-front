@@ -9,6 +9,7 @@ body {
 .content-container {
   display: flex;
   height: 100vh;
+  background-color: #f5f5f5;
 }
 
 table {
@@ -17,15 +18,15 @@ table {
 }
 
 .sidebar {
-  background-color: #e5e1da;
   flex-basis: 30%;
   padding-inline: 16px;
   padding-block: 32px;
+  border-left: 1px solid #333333;
 }
 
 .ordermenu {
-  background-color: #f5f5f5;
   flex-basis: 70%;
+  padding-block: 32px;
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -33,7 +34,7 @@ table {
 
 .error-text {
   font-size: 10px;
-  color: red;
+  color: #e53935;
   position: absolute;
   bottom: -1%;
   left: 50%;
@@ -46,18 +47,18 @@ table {
   justify-content: space-between;
 }
 
-.summary-list > *:first-child{
+.summary-list > *:first-child {
   font-weight: 300;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .summary-list > *:nth-child(2) {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 tbody > tr:nth-child(even) {
-  background-color: #f1f0e8;
+  background-color: #e9f6ff;
 }
 
 tbody > tr:nth-child(odd) {
@@ -70,12 +71,13 @@ td {
 }
 
 tr > th {
-  background-color: lightgray;
-  padding: 4px;
+  background-color: #cde9fd;
+  padding-inline: 4px;
   padding-block: 10px;
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
+  color: #333333;
 }
 
 tr > th:first-child {
@@ -109,7 +111,7 @@ tr > td {
   text-align: center;
   position: relative;
   min-height: 40px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 tr > td > input,
@@ -119,15 +121,14 @@ select {
   padding: 6px;
   padding-left: 8px;
   border-radius: 6px;
-  border: 1px solid;
-  border-color: #b3c8cf;
+  border: 1px solid #b3c8cf;
   box-sizing: border-box;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 tr > td > input:focus,
 select:focus {
-  outline: 2px solid #89a8b2;
+  outline: 2px solid #ffe066;
 }
 
 .action-button {
@@ -148,6 +149,14 @@ select:focus {
   background-color: #18b473;
   color: #ffff;
   font-weight: 700;
+}
+
+.action-button > button:disabled {
+  background-color: #d3d5d7;
+  color: #ffff;
+  font-weight: 700;
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .action-button > .btn-caution {
@@ -176,9 +185,10 @@ select:focus {
   font-weight: 700;
   border-radius: 8px;
   border: none;
-  background-color: #fff;
+  background-color: #ffe066;
   color: #333333;
   cursor: pointer;
+  min-width: 50%;
 }
 
 .btn-large-primary:hover {
@@ -206,9 +216,9 @@ select:focus {
   padding: 8px;
   border-radius: 16px;
   border: none;
-  background-color: #89a8b2;
-  color: white;
-  font-weight: 700;
+  background-color: #ffe066;
+  color: #333333;
+  font-weight: 600;
   font-size: 16px;
   cursor: pointer;
 }
@@ -224,5 +234,72 @@ select:focus {
 }
 
 .client-input {
-  padding: 4px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #767676;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333333;
+}
+
+.client-input::placeholder {
+  font-weight: 300;
+  color: #8e98a8;
+}
+
+.client-input:focus {
+  outline: 2px solid #ffe066;
+}
+
+.client-input:disabled {
+  color: #d3d5d7;
+  border: 1px solid #d3d5d7;
+  opacity: 0.4;
+}
+
+.client-input:not(:placeholder-shown) {
+  color: #333333;
+  font-weight: 500;
+}
+
+.textarea-note {
+  width: 100%;
+  height: 100px;
+  resize: none;
+  border: 1px solid #91959a;
+  border-radius: 8px;
+  padding: 16px;
+  box-sizing: border-box;
+  margin-block: 40px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.textarea-note:focus {
+  outline: 2px solid #ffe066;
+}
+
+.textarea-note:disabled {
+  color: #d3d5d7;
+  border: 1px solid #d3d5d7;
+}
+
+.textarea-remark {
+  margin-inline: 24px;
+  height: 20%;
+  resize: none;
+  border: 1px solid #91959a;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.textarea-remark:focus {
+  outline: 2px solid #ffe066;
+}
+
+.textarea-remark:disabled {
+  color: #d3d5d7;
+  border: 1px solid #d3d5d7;
 }

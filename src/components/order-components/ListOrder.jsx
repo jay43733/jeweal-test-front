@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useListStore from "../../store/listStore";
+import { toast } from "react-toastify";
 
 const ListOrder = ({ item, index }) => {
   const convertNumber = useListStore((state) => state.convertNumber);
@@ -7,6 +8,8 @@ const ListOrder = ({ item, index }) => {
   const actionDeleteList = useListStore((state) => state.actionDeleteList);
   const actionGetListById = useListStore((state) => state.actionGetListById);
   const currentListMenu = useListStore((state) => state.currentListMenu);
+  const isEditedListMenu = useListStore((state) => state.isEditedListMenu);
+
   const [selectedList, setSelectedList] = useState({
     ...item,
     listMenuId: Number(currentListMenu),
@@ -16,13 +19,13 @@ const ListOrder = ({ item, index }) => {
   const hdlDeleteList = async (id) => {
     await actionDeleteList(id);
     await actionGetListById(currentListMenu);
+    toast.info("Deleted List Successfully")
   };
 
   const [convertedSelectedList] = convertNumber(
     [selectedList],
     ["discount", "number", "pricePerWeight", "weight", "productId"]
   );
-
 
   const hdlChangeEditList = (e) => {
     const { name, value } = e.target;
@@ -48,23 +51,23 @@ const ListOrder = ({ item, index }) => {
     await actionUpdateList(form, id);
     await actionGetListById(currentListMenu);
     setIsListEdited(false);
+    toast.success("Updated Successfully")
   };
 
   // ราคาก่อนส่วนลด
   const netPrice =
-    item.unit === "piece"
+    item.unit === "PIECE"
       ? item.pricePerWeight * item.number
       : item.pricePerWeight * item.weight * item.number;
 
   // ราคาสุทธิ
   const actualPrice =
-    item.unit === "piece"
+    item.unit === "PIECE"
       ? item.pricePerWeight * item.number * ((100 - (item.discount || 0)) / 100)
       : item.pricePerWeight *
         item.weight *
         item.number *
         ((100 - (item.discount || 0)) / 100);
-
 
   return (
     <>
@@ -78,11 +81,11 @@ const ListOrder = ({ item, index }) => {
               name="productId"
             >
               <option disabled>Select</option>
-              <option value="4">PRO1</option>
-              <option value="5">PRO2</option>
-              <option value="6">PRO3</option>
-              <option value="7">PRO4</option>
-              <option value="8">PRO5</option>
+              <option value="1">PRO1</option>
+              <option value="2">PRO2</option>
+              <option value="3">PRO3</option>
+              <option value="4">PRO4</option>
+              <option value="5">PRO5</option>
             </select>
           </td>
           <td>
@@ -191,12 +194,14 @@ const ListOrder = ({ item, index }) => {
           <td>
             <div className="action-button">
               <button
+                disabled={!isEditedListMenu}
                 className="btn-secondary"
                 onClick={() => setIsListEdited(true)}
               >
                 Edit
               </button>
               <button
+                disabled={!isEditedListMenu}
                 className="btn-caution"
                 onClick={() => hdlDeleteList(item.listId)}
               >

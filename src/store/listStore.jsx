@@ -6,6 +6,7 @@ import {
   getAllList,
   getListById,
   getListMenuById,
+  updateListMenuById,
 } from "../services/ListService";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -13,10 +14,33 @@ const useListStore = create((set) => ({
   lists: [],
   listMenu: [],
   currentListMenu: null,
-  currentList: null,
+  formListMenu: {
+    docNumber: "",
+    issuedDate: "",
+    dueDate: "",
+    clientName: "",
+    taxInvoice: "",
+    address: "",
+    remarkNumber: "",
+    currency: "",
+    note: "",
+    remark: "",
+  },
+  isEditedListMenu: false,
+  setFormListMenu: (updates) =>
+    set((state) => ({
+      formListMenu: { ...state.formListMenu, ...updates },
+    })),
+  setIsEditedListMenu: (isEdited) =>
+    set(() => ({
+      isEditedListMenu: isEdited,
+    })),
   actionGetListMenuById: async (id) => {
     const resp = await getListMenuById(id);
     set({ listMenu: resp });
+  },
+  actionUpdateListMenuById: async (form, id) => {
+    const resp = await updateListMenuById(form, id);
   },
   actionGetListById: async (id) => {
     const resp = await getListById(id);

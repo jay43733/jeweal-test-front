@@ -10,23 +10,21 @@ const ActionPage = () => {
     (state) => state.actionGetListMenuById
   );
   const actionGetListById = useListStore((state) => state.actionGetListById);
-  const setCurrentListMenu = useListStore((state)=>state.setCurrentListMenu)
-  const lists = useListStore((state) => state.lists);
+  const setCurrentListMenu = useListStore((state) => state.setCurrentListMenu);
+  const currentListMenu = useListStore((state) => state.currentListMenu);
   const listMenu = useListStore((state) => state.listMenu);
   const { id } = useParams();
   const navigate = useNavigate();
-  const defaultPage = 3
+  const defaultPage = 1;
 
   useEffect(() => {
     if (!id) {
-      return navigate(`/${defaultPage}`);
+      navigate(`/${defaultPage}`);
+    } else {
+      actionGetListMenuById(id);
+      actionGetListById(id);
+      setCurrentListMenu(id);
     }
-  }, []);
-
-  useEffect(() => {
-    actionGetListMenuById(id);
-    actionGetListById(id);
-    setCurrentListMenu(id)
   }, [id]);
 
   return (

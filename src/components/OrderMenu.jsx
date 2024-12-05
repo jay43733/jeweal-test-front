@@ -1,7 +1,16 @@
 import React from "react";
 import Table from "./order-components/Table";
+import useListStore from "../store/listStore";
 
 const OrderMenu = () => {
+  const listMenu = useListStore((state) => state.listMenu);
+  const formListMenu = useListStore((state) => state.formListMenu);
+  const setFormListMenu = useListStore((state) => state.setFormListMenu);
+  const isEditedListMenu = useListStore((state) => state.isEditedListMenu);
+
+  const hdlChangeFormListMenu = (e) => {
+    setFormListMenu({ [e.target.name]: e.target.value });
+  };
   return (
     <>
       <div className="ordermenu">
@@ -17,16 +26,11 @@ const OrderMenu = () => {
           <Table />
         </div>
         <textarea
-          style={{
-            marginInline: "24px",
-            height: "20%",
-            resize: "none",
-            border: "1px solid #91959A",
-            borderRadius: "8px",
-            padding: "16px",
-            Width: "100%",
-          }}
-          name="comment"
+          value={formListMenu?.remark}
+          disabled={!isEditedListMenu}
+          onChange={hdlChangeFormListMenu}
+          className="textarea-remark"
+          name="remark"
           placeholder="Remark"
         ></textarea>
       </div>

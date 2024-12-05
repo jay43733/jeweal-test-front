@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useListStore from "../../store/listStore";
+import { toast } from "react-toastify";
 
 const NewList = ({ setIsListCreated, setAllOrders, id }) => {
   const convertNumber = useListStore((state) => state.convertNumber);
@@ -89,6 +90,7 @@ const NewList = ({ setIsListCreated, setAllOrders, id }) => {
     await actionAddList(convertedNewList);
     await actionGetListById(currentListMenu);
     setIsListCreated(false);
+    toast.success("Created List Successfully")
   };
 
   const hdlCancel = () => {
@@ -104,11 +106,11 @@ const NewList = ({ setIsListCreated, setAllOrders, id }) => {
             <option value="" disabled>
               Select
             </option>
-            <option value="4">PRO1</option>
-            <option value="5">PRO2</option>
-            <option value="6">PRO3</option>
-            <option value="7">PRO4</option>
-            <option value="8">PRO5</option>
+            <option value="1">PRO1</option>
+            <option value="2">PRO2</option>
+            <option value="3">PRO3</option>
+            <option value="4">PRO4</option>
+            <option value="5">PRO5</option>
           </select>
           {formError?.productId && (
             <p className="error-text">{formError?.productId}</p>
