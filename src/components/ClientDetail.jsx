@@ -11,9 +11,6 @@ const ClientDetail = () => {
     setFormListMenu({ [e.target.name]: e.target.value });
   };
 
-  console.log(formListMenu, "dssssssssssss");
-  console.log(listMenu, "list");
-
   return (
     <div style={{ display: "flex", backgroundColor: "#92D0FA" }}>
       <div
