@@ -12,7 +12,6 @@ const Table = () => {
     setIsListCreated(true);
   };
 
-  console.log(lists, "ssssss");
   return (
     <div
       style={{
@@ -45,8 +44,8 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {lists.length === 0 ? (
-            <tr>
+          {lists.length === 0 && !isListCreated ? (
+            <tr key="no-data-row">
               <td colSpan="10" style={{ textAlign: "center", padding: "20px" }}>
                 ไม่มีข้อมูล
               </td>
