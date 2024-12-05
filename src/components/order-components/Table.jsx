@@ -12,6 +12,7 @@ const Table = () => {
     setIsListCreated(true);
   };
 
+  console.log(lists, "ssssss");
   return (
     <div
       style={{
@@ -44,9 +45,18 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {lists?.map((item, index) => (
-            <ListOrder key={item.listId} item={item} index={index} />
-          ))}
+          {lists.length === 0 ? (
+            <tr>
+              <td colSpan="10" style={{ textAlign: "center", padding: "20px" }}>
+                ไม่มีข้อมูล
+              </td>
+            </tr>
+          ) : (
+            lists?.map((item, index) => (
+              <ListOrder key={item.listId} item={item} index={index} />
+            ))
+          )}
+
           {isListCreated && (
             <NewList
               setIsListCreated={setIsListCreated}
